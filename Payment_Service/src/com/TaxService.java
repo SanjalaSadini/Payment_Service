@@ -3,6 +3,8 @@ package com;
 import model.Tax;
 
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -11,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import org.glassfish.jersey.server.mvc.Viewable;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -18,22 +21,35 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class TaxService {
 	
 	Tax tax = new Tax();
+	
+	@GET
+	@Path("")
+	@Produces(MediaType.TEXT_HTML)
+	public Viewable index() {
+		return new Viewable("/main");
+	}
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String addTaxEntry(@FormParam("amount")float amount, 
-    		@NotNull(message = "Valid from Date can't be empty") @FormParam("validFrom") Date validFrom, 
-    		@NotNull(message = "Valid to Date can't be empty") @FormParam("validTo") Date validTo){
-        return this.tax.addTaxEntry(amount, validFrom, validTo);
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable addTaxEntry(@FormParam("amount")float amount, 
+    		@FormParam("validFrom") Date validFrom, 
+    		@FormParam("validTo") Date validTo){
+    	String msg = this.tax.addTaxEntry(amount, validFrom, validTo );
+		Map<String, String> model = new HashMap<>();
+		model.put("msg", msg);
+		return new Viewable("/main", model);
     }
     
     @GET
     @Path("/get")
     @Produces(MediaType.TEXT_HTML)
-    public String getAllTaxEntry(){
-        return this.tax.getAllTaxEntry();
+    public Viewable getAllTaxEntry(){
+    	String output = this.tax.getAllTaxEntry();
+    	Map<String, String> model = new HashMap<>();
+		model.put("output", output);
+		return new Viewable("/tax", model);
     }
 
     @GET
@@ -49,8 +65,8 @@ public class TaxService {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateTaxEntryById(@QueryParam("id") int id, 
     								@FormParam("amount") float amount, 
-    								@NotNull(message = "Valid from Date can't be empty") @FormParam("validFrom") Date validFrom,
-    								@NotNull(message = "Valid to Date can't be empty") @FormParam("validTo") Date validTo){
+    							    @FormParam("validFrom") Date validFrom,
+    								@FormParam("validTo") Date validTo){
     	
         return this.tax.updateTaxEntryById(id, amount, validFrom, validTo );
     }
@@ -63,4 +79,3 @@ public class TaxService {
     }
 
 }
-
