@@ -27,7 +27,7 @@ public class Tax {
             String getQuery = "select * from tax";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
 
-            String output = "<table border=\"1\">" +
+            String output ="<table class=\"table table-dark\" border=\"1\">" +
                     "<tr>" +
                     "<th>Tax ID</th>" +
                     "<th>Tax amount</th>" +
@@ -44,6 +44,7 @@ public class Tax {
                 output += "<td>" + taxAmount + "</td>";
                 output += "<td>" + validFrom + "</td>";
                 output += "<td>" + validTo + "</td>";
+                output += "<td class=\"update\">" + "<button type=\"button\" class=\"btn btn-warning\">Update</button>" + "</td>";
 
             }
             output += "</table>";
