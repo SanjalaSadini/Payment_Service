@@ -44,7 +44,7 @@ public class TaxService {
     
     @GET
     @Path("/get")
-    @Produces(MediaType.TEXT_HTML)
+//    @Produces(MediaType.TEXT_HTML)
     public Viewable getAllTaxEntry(){
     	String output = this.tax.getAllTaxEntry();
     	Map<String, String> model = new HashMap<>();
@@ -54,7 +54,7 @@ public class TaxService {
 
     @GET
     @Path("/getById")
-    @Produces(MediaType.TEXT_HTML)
+//    @Produces(MediaType.TEXT_HTML)
     public String getTaxEntryById(@QueryParam("id") int id){
         return this.tax.getTaxEntryById(id);
     }
