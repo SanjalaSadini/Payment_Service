@@ -4,6 +4,7 @@ $(document).ready(function()
     $("#alertError").hide();
     $("#alertSuccessUpdate").hide();
     $("#alertErrorUpdate").hide();
+    $("#formUpdatePayment").hide();
     if ($("#info").val() == ""){
         $("#info").hide();
     }
