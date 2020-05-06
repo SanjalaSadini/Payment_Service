@@ -22,13 +22,8 @@ public class Payment {
 							 int appointmentId) {
 
 		try (Connection con = DBConnector.getConnection()) {
-			if (con == null)    
-	        {
-				return "Error while connecting to the database"; 
-				} 
 			String insertQuery = " insert into payment values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 			PreparedStatement pstmnt = con.prepareStatement(insertQuery);
-
 			double subAmount = this.calculateSubAmount(appointmentId, paymentDate);
 			int taxId = this.getValidTax(paymentDate).getKey();
 			pstmnt.setString(1, cardType);
@@ -147,8 +142,7 @@ public class Payment {
                     e.getMessage();
         }
     }
-	
-	//Calculate Sub Amount
+
 	public double calculateSubAmount(int appointmentId, Date paymentDate) {
 		double subAmount = 0;
 		try (Connection con = DBConnector.getConnection()) {
@@ -177,7 +171,6 @@ public class Payment {
 
 	}
 	
-	//Get Valid Tax ID
 	@SuppressWarnings("restriction")
 	public Pair<Integer, Float> getValidTax(Date today) {
 		float taxAmount = 0;
@@ -255,4 +248,3 @@ public class Payment {
 	}
 
 }
-

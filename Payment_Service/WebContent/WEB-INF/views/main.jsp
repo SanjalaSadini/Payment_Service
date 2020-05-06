@@ -21,7 +21,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Tax Entry</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -29,7 +29,7 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="row">
-                        <form class="needs-validation" id="formPayment" name="formPayment" method="post" action="add" novalidate>
+                        <form class="needs-validation" id="formTax" name="formTax" method="post" action="add" novalidate>
 
                             <div class="input-group input-group-sm mb-3">
                                 <div class="input-group-prepend">

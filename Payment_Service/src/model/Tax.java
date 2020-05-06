@@ -4,25 +4,25 @@ import config.DBConnector;
 import java.sql.*;
 
 public class Tax {
-	
-	public String addTaxEntry(float amount, Date validFrom, Date validTo) {
-		try (Connection con = DBConnector.getConnection()) {
-			String insertQuery = "insert into tax values (NULL, ?, ?, ?)";
-			PreparedStatement pstmt = con.prepareStatement(insertQuery);
-			pstmt.setFloat(1, amount);
-			pstmt.setDate(2, validFrom);
-			pstmt.setDate(3, validTo);
-			pstmt.execute();
-			con.close();
-			
-			return "Tax entry added successfully";
-			
-		} catch (SQLException e) {
-			return "Error occur during adding\n" + e.getMessage();
-		}
-	}
-	
-	public String getAllTaxEntry(){
+
+    public String addTaxEntry(float amount, Date validFrom, Date validTo) {
+        try (Connection con = DBConnector.getConnection()) {
+            String insertQuery = "insert into tax values (NULL, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(insertQuery);
+            pstmt.setFloat(1, amount);
+            pstmt.setDate(2, validFrom);
+            pstmt.setDate(3, validTo);
+            pstmt.execute();
+            con.close();
+
+            return "Tax entry added successfully";
+
+        } catch (SQLException e) {
+            return "Error occur during adding\n" + e.getMessage();
+        }
+    }
+
+    public String getAllTaxEntry(){
         try(Connection con  = DBConnector.getConnection()) {
             String getQuery = "select * from tax";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
@@ -40,11 +40,12 @@ public class Tax {
                 Date validFrom = rs.getDate("valid_from");
                 Date validTo = rs.getDate("valid_to");
 
-                output += "<tr><td>" + taxId + "</td>";
+                output += "<tr><td class=\"id\">" + taxId + "</td>";
                 output += "<td>" + taxAmount + "</td>";
                 output += "<td>" + validFrom + "</td>";
                 output += "<td>" + validTo + "</td>";
-                output += "<td class=\"update\">" + "<button type=\"button\" class=\"btn btn-warning\">Update</button>" + "</td>";
+                output += "<td>" + "<button type=\"button\" class=\"btn btn-warning update\">Update</button>" + "</td>";
+                output += "<td>" + "<button type=\"button\" class=\"btn btn-danger delete\">Delete</button>" + "</td>";
 
             }
             output += "</table>";
@@ -56,8 +57,8 @@ public class Tax {
                     e.getMessage();
         }
     }
-	
-	public String getTaxEntryById(int id){
+
+    public String getTaxEntryById(int id){
         try(Connection con  = DBConnector.getConnection()) {
             String getQuery = "select * from tax where tax_id = ?";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
@@ -90,15 +91,15 @@ public class Tax {
                     e.getMessage();
         }
     }
-	
-	public String updateTaxEntryById(int id, float amount,Date validFrom,Date validTo){
+
+    public String updateTaxEntryById(int id, float amount,Date validFrom,Date validTo){
         try(Connection con  = DBConnector.getConnection()) {
             String updateQuery = "update tax set tax_amount = ? ,"
-            		+ "valid_from =? ,"
-            		+ "valid_to= ? "
-            		+ "where tax_id = ?";
+                    + "valid_from =? ,"
+                    + "valid_to= ? "
+                    + "where tax_id = ?";
             PreparedStatement pstmt = con.prepareStatement(updateQuery);
-           
+
             pstmt.setFloat(1, amount);
             pstmt.setDate(2, validFrom);
             pstmt.setDate(3, validTo);
@@ -112,47 +113,47 @@ public class Tax {
                     e.getMessage();
         }
     }
-	
-	//Check Used Tax Entry
-	public boolean checkTaxEntryUsed(Connection con, int id){
-	      boolean flag = true;
-	      try {
-	           String checkQuery = "select exists(select * from payment where tax_tax_id = ?);";
-	           PreparedStatement pstmt = con.prepareStatement(checkQuery);
-	           pstmt.setInt(1, id);
-	           ResultSet rs = pstmt.executeQuery();
-	           while (rs.next()){
-	               if (rs.getInt(1) > 0)
-	                   flag = true;
-	               else
-	                    flag = false;
-	            }
-	        }
-	        catch (SQLException e){
-	            flag = true;
-	        }
-	        return flag;
-	 }
-	  
-	 public String deleteTaxEntryById(int id){
-	       try(Connection con  = DBConnector.getConnection()) {
-	           if (checkTaxEntryUsed(con, id)){
-	               return "Cannot delete tax entry already used ";
-	            }
-	            else {
-	                String deleteQuery = "delete from tax where tax_id = ?";
-	                PreparedStatement pstmt = con.prepareStatement(deleteQuery);
-	                pstmt.setInt(1, id);
-	                pstmt.execute();
-	                con.close();
-	                return "Tax entry deleted successfully";
-	            }
 
-	        }
-	        catch (SQLException e){
-	            return "Error occur during deleting \n" +
-	                    e.getMessage();
-	        }
-	   }
+    //Check Used Tax Entry
+    public boolean checkTaxEntryUsed(Connection con, int id){
+        boolean flag = true;
+        try {
+            String checkQuery = "select exists(select * from payment where tax_tax_id = ?);";
+            PreparedStatement pstmt = con.prepareStatement(checkQuery);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                if (rs.getInt(1) > 0)
+                    flag = true;
+                else
+                    flag = false;
+            }
+        }
+        catch (SQLException e){
+            flag = true;
+        }
+        return flag;
+    }
+
+    public String deleteTaxEntryById(int id){
+        try(Connection con  = DBConnector.getConnection()) {
+            if (checkTaxEntryUsed(con, id)){
+                return "Cannot delete tax entry already used ";
+            }
+            else {
+                String deleteQuery = "delete from tax where tax_id = ?";
+                PreparedStatement pstmt = con.prepareStatement(deleteQuery);
+                pstmt.setInt(1, id);
+                pstmt.execute();
+                con.close();
+                return "Tax entry deleted successfully";
+            }
+
+        }
+        catch (SQLException e){
+            return "Error occur during deleting \n" +
+                    e.getMessage();
+        }
+    }
 
 }
