@@ -96,7 +96,7 @@ public class Payment {
             String getQuery = "select * from payment";
             PreparedStatement pstmt = con.prepareStatement(getQuery);
 
-            String output = "<table border=\"1\">" +
+            String output = "<table class=\"table table-dark\" border=\"1\">" +
                     "<tr>" +
 					"<th>Payment Id</th>" +
                     "<th>Card Type</th>" +
@@ -124,7 +124,7 @@ public class Payment {
 				int taxId = rs.getInt("tax_tax_id");
                 int appointmentId = rs.getInt("appoinment_appoinment_id");
 
-                output += "<tr><td>" + paymentId + "</td>";
+                output += "<tr><td class=\"id\">" + paymentId + "</td>";
                 output += "<td>" + cardType + "</td>";
                 output += "<td>" + cardNumber + "</td>";
 				output += "<td>" + nameOnCard + "</td>";
@@ -135,6 +135,7 @@ public class Payment {
 				output += "<td>" + paymentDate + "</td>";
 				output += "<td>" + taxId + "</td>";
 				output += "<td>" + appointmentId + "</td>";
+				output += "<td class=\"update\">" + "<button type=\"button\" class=\"btn btn-warning\">Update</button>" + "</td>";
 
             }
             output += "</table>";
